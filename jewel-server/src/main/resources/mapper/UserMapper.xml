@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lizj.dao.UserMapperDAO">
+    
+    <resultMap id="userOrderResultMap" type="com.lizj.bean.User">
+        <id column="user_id" property="id" />
+        <result column="user_username" property="username"/>
+        <result column="user_birthday" property="birthday"/>
+        <result column="user_sex" property="sex"/>
+        <result column="user_address" property="address"/>
+
+        <collection property="ordersList" ofType="com.lizj.bean.Orders">
+            <id column="order_id" property="id"/>
+            <result column="order_user_id" property="userId"/>
+            <result column="order_createtime" property="createtime"/>
+            <result column="order_note" property="note"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="orderUserResultMap" type="com.lizj.bean.Orders">
+        <id column="order_id" property="id"/>
+        <result column="order_user_id" property="userId"/>
+        <result column="order_createtime" property="createtime"/>
+        <result column="order_note" property="note"/>
+        <association property="user" javaType="com.lizj.bean.User">
+            <id column="user_id" property="id" />
+            <result column="user_username" property="username"/>
+            <result column="user_birthday" property="birthday"/>
+            <result column="user_sex" property="sex"/>
+            <result column="user_address" property="address"/>
+        </association>
+    </resultMap>
+
+    <select id="getUserById" parameterType="int" resultType="com.lizj.bean.User">
+        select * from user where id = #{id}
+    </select>
+
+    <select id="getUsers" resultType="com.lizj.bean.User">
+        select * from user
+    </select>
+
+    <select id="getUserOrders" parameterType="int" resultMap="userOrderResultMap">
+        select
+            o.id as order_id,
+            o.user_id as order_user_id,
+            o.createtime as order_createtime,
+            o.note as order_note,
+            u.id as user_id,
+            u.username as user_username,
+            u.birthday as user_birthday,
+            u.sex as user_sex,
+            u.address as user_address
+        from orders as o left join user as u on o.user_id = u.id where u.id = #{id}
+    </select>
+
+    <select id="getOrdersUser" parameterType="int" resultMap="orderUserResultMap">
+        select
+        o.id as order_id,
+        o.user_id as order_user_id,
+        o.createtime as order_createtime,
+        o.note as order_note,
+        u.id as user_id,
+        u.username as user_username,
+        u.birthday as user_birthday,
+        u.sex as user_sex,
+        u.address as user_address
+        from orders as o left join user as u on o.user_id = u.id where u.id = #{id}
+    </select>
+
+    <insert id="insertUser" parameterType="com.lizj.bean.User" useGeneratedKeys="true" keyProperty="id">
+        insert into user (username, birthday, sex, address) values ( #{username},#{birthday}, #{sex}, #{address})
+    </insert>
+
+    <!-- 批量插入用戶 -->
+    <insert id="batchInsterUser" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+      insert into user (username, birthday, sex, address) values
+      <foreach collection="list" item="user" separator=",">
+          ( #{user.username},#{user.birthday}, #{user.sex}, #{user.address})
+      </foreach>
+    </insert>
+
+    <update id="updateUserById" parameterType="com.lizj.bean.User" >
+        update user set username = #{username}, address = #{address}, sex = #{sex} where id = #{id}
+    </update>
+
+    <delete id="deleteUserById" parameterType="int" >
+        delete from user where id = #{id}
+    </delete>
+</mapper>

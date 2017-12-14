@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="user">
+    <select id="getUserById" parameterType="int" resultType="com.lizj.bean.User">
+        select * from user where id = #{id}
+    </select>
+
+    <select id="getUsers" resultType="com.lizj.bean.User">
+        select * from user
+    </select>
+
+    <insert id="insertUser" parameterType="com.lizj.bean.User" useGeneratedKeys="true" keyProperty="id">
+        insert into user (username, birthday, sex, address) values ( #{username},#{birthday}, #{sex}, #{address})
+    </insert>
+
+    <update id="updateUserById" parameterType="com.lizj.bean.User" >
+        update user set username = #{username}, address = #{address}, sex = #{sex} where id = #{id}
+    </update>
+
+    <delete id="deleteUserById" parameterType="int" >
+        delete from user where id = #{id}
+    </delete>
+</mapper>
