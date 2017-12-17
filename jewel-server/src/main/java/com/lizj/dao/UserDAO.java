@@ -2,6 +2,7 @@ package com.lizj.dao;
 
 import com.lizj.bean.User;
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ import java.util.List;
  */
 public class UserDAO {
 
+    @Cacheable(value="user", key = "#id")
     public User getUserById(int id){
         SqlSession sqlSession = SimpleSessionFactory.getSqlSession();
         User user = sqlSession.selectOne("user.getUserById", id);

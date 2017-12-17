@@ -1,8 +1,11 @@
 package com.lizj.bean;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Orders {
+public class Orders implements Serializable {
+    private static final long serialVersionUID = 4838209036706723621L;
+
     private int id;
 
     private int userId;

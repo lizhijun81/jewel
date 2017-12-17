@@ -1,4 +1,3 @@
-import com.lizj.bean.Orders;
 import com.lizj.dao.OrdersDAO;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,8 +20,9 @@ public class TestOrdersDAO {
 
     @Test
     public void testGetOrdersById(){
-        Orders orders = ordersDAO.getOrderById(3);
-        System.out.println(orders);
+        ordersDAO.getOrderById(3);
+        ordersDAO.getOrderById(4);
+        ordersDAO.getOrderById(5);
     }
 
 }
